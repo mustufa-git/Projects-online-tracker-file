@@ -7,6 +7,29 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
+  import sqlite3
+import os
+
+# ডাটাবেসের লোকেশন ঠিক করা
+DB_PATH = 'database.db'
+
+def init_db():
+    # ফাইলটি যদি না থাকে, তবে তৈরি করবে
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    # ইউজার টেবিল তৈরি করা
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        username TEXT NOT NULL, 
+                        password TEXT NOT NULL)''')
+    
+    # প্রথমবার রান করলে 'admin' ইউজার তৈরি করে রাখা
+    cursor.execute("INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)", ('admin', 'admin123'))
+    conn.commit()
+    conn.close()
+
+# অ্যাপ রান করার সময় ডাটাবেসটি রেডি করা
+init_db()
   --bg:#0f0f13;--sidebar:#16161e;--card:#1e1e28;--card2:#252530;
   --accent:#7F77DD;--accent2:#534AB7;--border:rgba(255,255,255,0.08);
   --text:#e8e8f0;--muted:rgba(255,255,255,0.45);--muted2:rgba(255,255,255,0.25);
