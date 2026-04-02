@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Project Tracker — Login</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;}
+.login-wrap{width:100%;max-width:420px;padding:20px;}
+.logo-area{text-align:center;margin-bottom:32px;}
+.logo-icon{width:72px;height:72px;background:linear-gradient(135deg,#534AB7,#7F77DD);border-radius:18px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.logo-icon svg{width:38px;height:38px;}
+.logo-title{font-size:26px;font-weight:700;color:#fff;letter-spacing:-0.5px;}
+.logo-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;}
+.card{background:rgba(255,255,255,0.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;}
+.field-label{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:6px;display:block;}
+.field-input{width:100%;padding:12px 14px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;font-size:14px;color:#fff;outline:none;transition:border-color 0.2s;}
+.field-input::placeholder{color:rgba(255,255,255,0.3);}
+.field-input:focus{border-color:#7F77DD;background:rgba(255,255,255,0.12);}
+.field-group{margin-bottom:16px;}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,#534AB7,#7F77DD);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;transition:opacity 0.2s;}
+.btn-login:hover{opacity:0.9;}
+.btn-login:active{transform:scale(0.99);}
+.error-msg{background:rgba(226,75,74,0.15);border:1px solid rgba(226,75,74,0.3);color:#ff8080;padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none;}
+.remember-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.remember-row input{width:auto;accent-color:#7F77DD;}
+.remember-row label{font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer;}
+.version{text-align:center;margin-top:20px;font-size:11px;color:rgba(255,255,255,0.2);}
+</style>
+</head>
+<body>
+<div class="login-wrap">
+  <div class="logo-area">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+    </div>
+    <div class="logo-title">Project Tracker</div>
+    <div class="logo-sub">Video Editing Work Manager</div>
+  </div>
+
+  <div class="card">
+    <div class="field-group">
+      <label class="field-label">Username</label>
+      <input class="field-input" id="username" type="text" placeholder="তোমার username দাও" autocomplete="username">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Password</label>
+      <input class="field-input" id="password" type="password" placeholder="তোমার password দাও" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="remember-row">
+      <input type="checkbox" id="remember" checked>
+      <label for="remember">Login মনে রাখো</label>
+    </div>
+    <button class="btn-login" onclick="doLogin()" id="loginBtn">Login করো</button>
+    <div class="error-msg" id="errMsg"></div>
+  </div>
+  <div class="version">Project Tracker v2.0</div>
+</div>
+
+<script>
+const pcName = navigator.userAgent.includes('Win') ? 'Windows PC' : navigator.platform;
+
+async function doLogin() {
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value.trim();
+  if(!u || !p) { showErr('Username ও password দাও'); return; }
+  const btn = document.getElementById('loginBtn');
+  btn.textContent = 'লোড হচ্ছে...'; btn.disabled = true;
+  try {
+    const r = await fetch('/api/login', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({username:u, password:p, pc_name: pcName})});
+    const d = await r.json();
+    if(d.ok) { window.location.href = '/dashboard'; }
+    else { showErr(d.error || 'ভুল হয়েছে'); btn.textContent='Login করো'; btn.disabled=false; }
+  } catch(e) { showErr('Server-এ সমস্যা হচ্ছে'); btn.textContent='Login করো'; btn.disabled=false; }
+}
+
+function showErr(msg) {
+  const el = document.getElementById('errMsg');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+// Auto-fill saved credentials
+const saved = localStorage.getItem('tracker_user');
+if(saved) { document.getElementById('username').value = saved; document.getElementById('password').focus(); }
+document.getElementById('username').addEventListener('change', function() {
+  if(document.getElementById('remember').checked) localStorage.setItem('tracker_user', this.value);
+});
+</script>
+</body>
+</html>

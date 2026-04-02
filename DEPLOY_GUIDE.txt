@@ -1,0 +1,126 @@
+╔══════════════════════════════════════════════════════╗
+║        PROJECT TRACKER — DEPLOY GUIDE               ║
+║        ধাপে ধাপে সম্পূর্ণ বাংলা গাইড               ║
+╚══════════════════════════════════════════════════════╝
+
+এই গাইড অনুসরণ করলে তোমার app টা internet-এ
+চলে যাবে এবং যেকোনো জায়গা থেকে access করা যাবে।
+
+সময় লাগবে: মাত্র ১০-১৫ মিনিট
+খরচ: সম্পূর্ণ FREE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ধাপ ১ — GitHub Account বানাও (যদি না থাকে)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+১. github.com এ যাও
+২. "Sign up" এ click করো
+৩. Gmail দিয়ে account বানাও
+৪. Email verify করো
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ধাপ ২ — GitHub-এ Code Upload করো
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+১. github.com এ login করো
+২. উপরে ডানে "+" চিহ্নে click করো
+৩. "New repository" select করো
+৪. Repository name দাও: project-tracker
+৫. "Private" select করো (অন্যরা দেখতে পাবে না)
+৬. "Create repository" click করো
+
+এখন files upload করো:
+৭. "uploading an existing file" লেখায় click করো
+৮. এই ZIP-এর সব files টেনে আনো (drag & drop):
+   - app.py
+   - requirements.txt
+   - Procfile
+   - render.yaml
+   - templates/ (folder সহ)
+৯. নিচে "Commit changes" button click করো
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ধাপ ৩ — Render.com-এ Deploy করো
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+১. render.com এ যাও
+২. "Get Started for Free" click করো
+৩. "Continue with GitHub" click করো
+   (GitHub account দিয়ে login হবে)
+৪. বাম দিকে "New +" button click করো
+৫. "Web Service" select করো
+৬. "Connect a repository" — তোমার "project-tracker" repo select করো
+৭. এই settings দাও:
+   Name: project-tracker (যেকোনো নাম)
+   Environment: Python 3
+   Build Command: pip install -r requirements.txt
+   Start Command: gunicorn app:app --bind 0.0.0.0:$PORT
+   Instance Type: Free
+৮. "Create Web Service" click করো
+
+৯. কিছুক্ষণ অপেক্ষা করো (২-৩ মিনিট)
+১০. Deploy শেষে তোমার link পাবে যেমন:
+    https://project-tracker-xxxx.onrender.com
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ধাপ ৪ — Desktop Shortcut বানাও
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+১. CREATE_DESKTOP_SHORTCUT.bat file খোলো Notepad-এ
+   (Right-click → Edit)
+২. এই line টা খোঁজো:
+   set APP_URL=https://YOUR-APP-NAME.onrender.com
+৩. YOUR-APP-NAME এর জায়গায় তোমার real link দাও
+   যেমন: set APP_URL=https://project-tracker-abc.onrender.com
+৪. Save করো
+৫. CREATE_DESKTOP_SHORTCUT.bat এ double-click করো
+৬. Desktop-এ "Project Tracker" icon আসবে!
+৭. Double-click করলে Chrome-এ app খুলবে
+   (DaVinci Resolve-এর মতো দেখাবে!)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DEFAULT LOGIN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Username: admin
+Password: admin123
+
+প্রথমেই Settings থেকে password বদলে নাও!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+USER দেওয়ার নিয়ম
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+১. Admin হয়ে login করো
+২. বাম দিকে "Users" এ click করো
+৩. "+ User যোগ" বোতামে click করো
+৪. নাম, username, password দাও
+৫. Role: Viewer select করো
+৬. সেই username ও password তাকে বলো
+৭. সে যেকোনো জায়গা থেকে browser-এ
+   তোমার link দিয়ে login করতে পারবে
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+সমস্যা হলে
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Deploy এ সমস্যা হলে Render dashboard-এ
+"Logs" দেখো — error message থাকলে
+সেটা Claude-কে দেখাও, ঠিক করে দেব!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+গুরুত্বপূর্ণ নোট
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+★ Render-এর Free plan-এ app ১৫ মিনিট inactive
+  থাকলে "sleep" হয়। পরের বার খুলতে ৩০ সেকেন্ড
+  লাগতে পারে। এটা normal।
+
+★ Data রাখা থাকবে যতদিন Render-এ আছো।
+
+★ Custom domain (যেমন mytracker.com) লাগলে
+  পরে বলো, সেটাও করা যাবে।
+
+╔══════════════════════════════════════════════════════╗
+║  কোনো সমস্যা হলে screenshot তুলে Claude-কে দেখাও  ║
+╚══════════════════════════════════════════════════════╝
