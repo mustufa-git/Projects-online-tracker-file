@@ -638,7 +638,21 @@ async function changePassword() {
   if(r.ok){document.getElementById('s-old').value='';document.getElementById('s-new').value='';document.getElementById('s-confirm').value='';toast('Password সফলভাবে বদলানো হয়েছে!');}
   else toast(r.error||'ভুল হয়েছে','err');
 }
+import sqlite3
 
+def init_db():
+    conn = sqlite3.connect('database.db') # আপনার ডেটাবেসের নাম
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        username TEXT UNIQUE NOT NULL,
+                        password TEXT NOT NULL)''')
+    conn.commit()
+    conn.close()
+
+# অ্যাপ চালু হওয়ার সময় টেবিল তৈরি করবে
+with app.app_context():
+    init_db()
 init();
 </script>
 </body>
