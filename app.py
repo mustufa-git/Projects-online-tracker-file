@@ -339,15 +339,12 @@ def get_activity():
             JOIN users u ON al.user_id=u.id ORDER BY al.timestamp DESC LIMIT 20""").fetchall()
     return jsonify({"logs": [dict(l) for l in logs]})
 
-if __name__ == "__main__":
-    init_db()
-    port = int(os.environ.get("PORT", 5000))
-    with app.app_context():
-    init_db()
-
 if __name__ == '__main__':
     with app.app_context():
-        init_db()
+        try:
+            init_db()
+        except Exception as e:
+            print(f"Database error: {e}")
     
     port = int(os.environ.get("PORT", 10000))
     app.run(host='0.0.0.0', port=port)
